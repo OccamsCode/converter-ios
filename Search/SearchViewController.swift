@@ -1,0 +1,92 @@
+import UIKit
+
+protocol SelectFlagDelegate {
+    func didSelectFlag(url: String, currency: String)
+}
+
+class SearchViewController: UIViewController {
+    
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+
+    var viewModel: SearchViewModel!
+    var searchController: UISearchBar!
+    var delegate: SelectFlagDelegate?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        setupTableSearchBar()
+        setupTableView()
+        viewModel?.fetchMetaData()
+        viewModel?.onUpdate = {[weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+    
+    func setupTableSearchBar() {
+        searchController = UISearchBar()
+        searchController.placeholder = SearchViewModel.Constants.title
+        searchController.delegate = self
+        searchController.translatesAutoresizingMaskIntoConstraints = false
+        let searchBarContainer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 664))
+        searchBarContainer.addSubview(searchController)
+        view.addSubview(searchBarContainer)
+        NSLayoutConstraint.activate([
+            searchController.topAnchor.constraint(equalTo: view.topAnchor),
+            searchController.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchController.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
+    func setupTableView() {
+        view.addSubview(tableView)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(CurrencyCell.self, forCellReuseIdentifier: "CurrencyCell")
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: searchController.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
+
+extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.filteredArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CurrencyCell", for: indexPath) as! CurrencyCell
+        cell.tag = indexPath.row
+        cell.currencyConverterImageView.image = nil
+        cell.set(metaData: viewModel.filteredArray[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.didSelectFlag(url: viewModel.filteredArray[indexPath.row].url, currency: viewModel.filteredArray[indexPath.row].assetId)
+        dismiss(animated: true)
+    }
+}
+
+extension SearchViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.filteredArray = []
+        if searchText.isEmpty {
+            viewModel.filteredArray = viewModel.metaDataArray
+        } else {
+            for item in viewModel.metaDataArray {
+                if item.assetId.lowercased().contains(searchText.lowercased()) {
+                    viewModel.filteredArray.append(item)
+                }
+            }
+        }
+        self.tableView.reloadData()
+    }
+}
