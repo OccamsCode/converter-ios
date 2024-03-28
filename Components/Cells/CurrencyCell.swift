@@ -1,6 +1,6 @@
 import UIKit
 
-class CurrencyCell: UITableViewCell {
+final class CurrencyCell: UITableViewCell {
     let currencyConverterImageView = CurrencyConverterImageView(frame: .zero)
     let label = UILabel()
     
@@ -9,7 +9,7 @@ class CurrencyCell: UITableViewCell {
     }
     
     func set(metaData: MetaData) {
-        currencyConverterImageView.downloaded1(from: URL(string: metaData.url)!)
+        currencyConverterImageView.downloadImage(from: URL(string: metaData.url)!)
         label.text = metaData.assetId
     }
     

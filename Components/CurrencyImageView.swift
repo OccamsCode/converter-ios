@@ -1,6 +1,6 @@
 import UIKit
 
-class CurrencyConverterImageView: UIImageView {
+final class CurrencyConverterImageView: UIImageView {
     
     let cache = NetworkManager.shared.cache
     private var fetchedImage: UIImage?
@@ -22,7 +22,7 @@ class CurrencyConverterImageView: UIImageView {
     }
 
     
-    func downloaded1(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {
+    func downloadImage(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {
         contentMode = mode
         image = nil
         
@@ -49,10 +49,4 @@ class CurrencyConverterImageView: UIImageView {
         }
         task.resume()
     }
-    
-    func downloaded2(from link: String, contentMode mode: ContentMode = .scaleAspectFit) {
-        guard let url = URL(string: link) else { return }
-        downloaded(from: url, contentMode: mode)
-    }
-    
 }
