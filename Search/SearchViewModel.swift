@@ -4,7 +4,7 @@ protocol FlagDelegate {
     func updateFlag()
 }
 
-class SearchViewModel {
+final class SearchViewModel {
     
     enum Constants {
        static let title = "Search"

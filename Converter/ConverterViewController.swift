@@ -1,6 +1,6 @@
 import UIKit
 
-class ConverterViewController: UIViewController, SelectFlagDelegate {
+final class ConverterViewController: UIViewController, SelectFlagDelegate {
     
     private let secondNumberSubView: UIView = {
         let secondNumberSubView = UIView()

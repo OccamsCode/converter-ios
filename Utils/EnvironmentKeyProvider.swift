@@ -1,5 +1,8 @@
 import Foundation
 
+protocol APIKeyable {
+    var API: String { get }
+}
 
 class EnvironmentProviderKeyBase {
     
@@ -15,11 +18,7 @@ class EnvironmentProviderKeyBase {
     }
 }
 
-protocol APIKeyable {
-    var API: String { get }
-}
-
-class EnvironmentProviderKey: EnvironmentProviderKeyBase, APIKeyable {
+final class EnvironmentProviderKey: EnvironmentProviderKeyBase, APIKeyable {
     
     init() {
         super.init(resourceName: "API_KEY")

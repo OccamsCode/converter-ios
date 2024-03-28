@@ -11,7 +11,7 @@ enum AppError: String, Error {
     case invalidData      = "The data received from the server was invalid. Please try again."
 }
 
-class NetworkManager: CurrencyServicingType {
+final class NetworkManager: CurrencyServicingType {
     static let shared = NetworkManager()
     private let baseURL = "https://rest.coinapi.io/v1/exchangerate/"
     private let apikey = ENV.API

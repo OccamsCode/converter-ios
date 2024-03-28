@@ -4,17 +4,17 @@ protocol SelectFlagDelegate {
     func didSelectFlag(url: String, currency: String)
 }
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
     
-    let tableView: UITableView = {
+    private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
     var viewModel: SearchViewModel!
-    var searchController: UISearchBar!
     var delegate: SelectFlagDelegate?
+    private var searchController: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class SearchViewController: UIViewController {
         }
     }
     
-    func setupTableSearchBar() {
+    private func setupTableSearchBar() {
         searchController = UISearchBar()
         searchController.placeholder = SearchViewModel.Constants.title
         searchController.delegate = self
@@ -42,7 +42,7 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self

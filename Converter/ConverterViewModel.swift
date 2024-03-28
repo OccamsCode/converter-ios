@@ -5,7 +5,7 @@ enum CalculateBehaviour: Equatable {
     case appendNumberBeforeDot(_ number: Int)
 }
 
-class ConverterViewModel {
+final class ConverterViewModel {
     
     enum Constants {
         static let title = "Currency Converter"

@@ -7,7 +7,7 @@ protocol Coordinator {
     func start()
 }
 
-class AppCoordinator: Coordinator {
+final class AppCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
     
