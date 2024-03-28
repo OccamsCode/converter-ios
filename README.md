@@ -1,6 +1,6 @@
 # Simple Converter
 
-Simple Converter is a work-in-progress iOS app that converts between multiple currencies. It calls the [rest coin api](https://github.com/coinapi/coinapi-sdk). Currently, it uses UIKit with a programmatic approach and MVVM-C architecture.
+Simple Converter is a work-in-progress iOS app that converts between multiple currencies. It calls the [Coin API](https://github.com/coinapi/coinapi-sdk). Currently, it uses UIKit with a programmatic approach and MVVM-C architecture.
 
 <img width="257" alt="Screenshot 2024-03-26 at 23 18 17" src="https://github.com/olivrrrrr/converter-ios/assets/68692361/4547e720-850b-47bf-8541-028fd122c681">
 <img width="271" alt="Screenshot 2024-03-26 at 23 20 13" src="https://github.com/olivrrrrr/converter-ios/assets/68692361/84e1e932-b0e0-422b-b003-6f5cb9392540">
