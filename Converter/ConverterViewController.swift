@@ -45,7 +45,7 @@ final class ConverterViewController: UIViewController, SelectFlagDelegate {
     
     private lazy var secondNumber: UILabel = {
         let secondNumber = UILabel()
-        secondNumber.text = "0.00"
+        secondNumber.text = viewModel.secondNumber
         return secondNumber
     }()
     
@@ -105,7 +105,8 @@ final class ConverterViewController: UIViewController, SelectFlagDelegate {
     
     @objc private func dotButtonPressed() {
         if initialNumber.text?.firstIndex(of: ".") == nil {
-            initialNumber.text! += "."
+            viewModel.initialNumber += "."
+            initialNumber.text = viewModel.initialNumber
             viewModel.dotPressed = true
         }
     }
@@ -143,7 +144,7 @@ final class ConverterViewController: UIViewController, SelectFlagDelegate {
 
      private func numberButtonTapped(tag: Int) {
          guard let currentText = initialNumber.text else { return }
-         let newText = viewModel.calculateBehaviour(tag: tag, currentText: currentText)
+         let newText = viewModel.keypadBehaviour(tag: tag, currentText: currentText)
          updateInitialNumberLabel(text: newText)
      }
 }

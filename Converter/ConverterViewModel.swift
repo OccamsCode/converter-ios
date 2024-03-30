@@ -1,6 +1,6 @@
 import Foundation
 
-enum CalculateBehaviour: Equatable {
+enum KeypadBehaviour: Equatable {
     case appendNumberAfterDot(_ number: Int)
     case appendNumberBeforeDot(_ number: Int)
 }
@@ -29,8 +29,7 @@ final class ConverterViewModel {
          dotPressed: Bool = false,
          currencyArray: [Currency] = [],
          initialNumber: String = "0",
-         secondNumber: String = "0.00"
-    ) {
+         secondNumber: String = "0.00") {
         self.firstCurrencyFlag = firstCurrencyFlag
         self.secondCurrencyFlag = secondCurrencyFlag
         self.isFirstFlagSelected = isFirstFlagSelected
@@ -71,7 +70,7 @@ final class ConverterViewModel {
         }
     }
     
-    func calculateBehaviour(tag: Int, currentText: String) -> String {
+    func keypadBehaviour(tag: Int, currentText: String) -> String {
         var text = currentText
         
         let behaviour = nav(number: tag)
@@ -89,7 +88,7 @@ final class ConverterViewModel {
         return text
     }
     
-    func nav(number: Int) -> CalculateBehaviour {
+    func nav(number: Int) -> KeypadBehaviour {
         if dotPressed {
             return .appendNumberAfterDot(number)
         } else {
