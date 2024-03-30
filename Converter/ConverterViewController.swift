@@ -71,8 +71,8 @@ final class ConverterViewController: UIViewController, SelectFlagDelegate {
     @objc private func clearNumber() {
         initialNumber.text?.removeAll()
         viewModel.initialNumber = "0"
-        initialNumber.text = viewModel.initialNumber
         viewModel.dotPressed = false
+        initialNumber.text = viewModel.initialNumber
         updateSecondNumber()
     }
     
@@ -198,7 +198,7 @@ extension ConverterViewController {
         
         numberSubView.addSubview(initialNumber)
         initialNumber.translatesAutoresizingMaskIntoConstraints = false
-        initialNumber.text = "0"
+        initialNumber.text = viewModel.initialNumber
         initialNumber.font = .systemFont(ofSize: 50.0, weight: .thin)
         initialNumber.textAlignment = .right
         initialNumber.adjustsFontSizeToFitWidth = true
@@ -320,7 +320,7 @@ extension ConverterViewController {
         button2.addTarget(self, action: #selector(clearNumber), for: .touchUpInside)
     }
     
-    func setUpFlags() {
+    private func setUpFlags() {
         fetchCurrencyData(baseCurrency: viewModel.firstCurrencyFlag, secondaryCurrency: viewModel.secondCurrencyFlag)
         flag.downloaded(from: "https://s3.eu-central-1.amazonaws.com/bbxt-static-icons/type-id/png_512/0a4185f21a034a7cb866ba7076d8c73b.png")
         secondFlag.downloaded(from: "https://s3.eu-central-1.amazonaws.com/bbxt-static-icons/type-id/png_512/4caf2b16a0174e26a3482cea69c34cba.png")

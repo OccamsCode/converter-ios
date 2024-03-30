@@ -4,7 +4,7 @@ final class CurrencyConverterImageView: UIImageView {
     
     let cache = NetworkManager.shared.cache
     private var fetchedImage: UIImage?
-    var task: URLSessionDataTask!
+    private var task: URLSessionDataTask!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
