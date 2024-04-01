@@ -1,6 +1,6 @@
 import UIKit
 
-final class ConverterViewController: UIViewController, SelectFlagDelegate {
+final class ConverterViewController: UIViewController {
     
     private let secondNumberSubView: UIView = {
         let secondNumberSubView = UIView()
@@ -86,21 +86,22 @@ final class ConverterViewController: UIViewController, SelectFlagDelegate {
     }
     
     @objc private func flagPressed() {
-        let vc = DependencyProvider.searchViewController
-        vc.delegate = self
-        vc.modalPresentationStyle = .pageSheet
-        vc.sheetPresentationController?.detents = [.medium()]
-        self.present(vc, animated: true)
-        viewModel.isFirstFlagSelected = true
+        viewModel.onUpdate = updateFlags
+        viewModel.flagPressed(.first)
     }
     
     @objc private func secondFlagPressed() {
-        let vc = DependencyProvider.searchViewController
-        vc.delegate = self
-        vc.modalPresentationStyle = .pageSheet
-        vc.sheetPresentationController?.detents = [.medium()]
-        self.present(vc, animated: true)
-        viewModel.isSecondFlagSelected = true
+        viewModel.onUpdate = updateFlags
+        viewModel.flagPressed(.second)
+    }
+    
+    private func updateFlags(_ url: String) {
+        if self.viewModel.isFirstFlagSelected {
+            flag.downloaded(from: url)
+        } else if self.viewModel.isSecondFlagSelected {
+            secondFlag.downloaded(from: url)
+        }
+        self.resetUI()
     }
     
     @objc private func dotButtonPressed() {
@@ -113,17 +114,6 @@ final class ConverterViewController: UIViewController, SelectFlagDelegate {
     
     private func fetchCurrencyData(baseCurrency: String, secondaryCurrency: String) {
         viewModel.fetchCurrencyData(baseCurrency: baseCurrency, secondaryCurrency: secondaryCurrency)
-    }
-
-    func didSelectFlag(url: String, currency: String) {
-        if viewModel.isFirstFlagSelected {
-            flag.downloaded(from: url)
-        } else if viewModel.isSecondFlagSelected {
-            secondFlag.downloaded(from: url)
-        }
-        viewModel.didSelectFlag(url: url, currency: currency)
-        resetUI()
-        fetchCurrencyData(baseCurrency: viewModel.firstCurrencyFlag, secondaryCurrency: viewModel.secondCurrencyFlag)
     }
 
     private func resetUI() {

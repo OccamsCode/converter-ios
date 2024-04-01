@@ -6,6 +6,9 @@ protocol FlagDelegate {
 
 final class SearchViewModel {
     
+    var delegate: SelectFlagDelegate?
+    var coordinator: AppCoordinator?
+    
     enum Constants {
        static let title = "Search"
     }
@@ -23,6 +26,20 @@ final class SearchViewModel {
     }
     
     var onUpdate: (() -> Void) = {}
+    
+    func didSelectItem(at indexPath: IndexPath) {
+        let metaData = filteredArray[indexPath.row]
+        delegate?.didSelectFlag(url:metaData.url, currency: metaData.assetId)
+        coordinator?.dismissSearchViewController()
+    }
+    
+    func filterSearch(_ searchText: String) {
+        if searchText.isEmpty {
+            filteredArray = metaDataArray
+        } else {
+            filteredArray = metaDataArray.filter { $0.assetId.lowercased().contains(searchText.lowercased()) }
+        }
+    }
 
     func fetchMetaData() {
         NetworkManager.shared.fetchMetaData { result in

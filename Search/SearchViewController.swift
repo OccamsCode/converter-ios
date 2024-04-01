@@ -13,7 +13,6 @@ final class SearchViewController: UIViewController {
     }()
 
     var viewModel: SearchViewModel!
-    var delegate: SelectFlagDelegate?
     private var searchController: UISearchBar!
 
     override func viewDidLoad() {
@@ -70,23 +69,12 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelectFlag(url: viewModel.filteredArray[indexPath.row].url, currency: viewModel.filteredArray[indexPath.row].assetId)
-        dismiss(animated: true)
+        viewModel.didSelectItem(at: indexPath)
     }
 }
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.filteredArray = []
-        if searchText.isEmpty {
-            viewModel.filteredArray = viewModel.metaDataArray
-        } else {
-            for item in viewModel.metaDataArray {
-                if item.assetId.lowercased().contains(searchText.lowercased()) {
-                    viewModel.filteredArray.append(item)
-                }
-            }
-        }
-        self.tableView.reloadData()
+        viewModel.filterSearch(searchText)
     }
 }

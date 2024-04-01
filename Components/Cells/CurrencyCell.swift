@@ -9,8 +9,10 @@ final class CurrencyCell: UITableViewCell {
     }
     
     func set(metaData: MetaData) {
-        currencyConverterImageView.downloadImage(from: URL(string: metaData.url)!)
         label.text = metaData.assetId
+        if let imageUrl = URL(string: metaData.url) {
+            currencyConverterImageView.downloadImage(from: imageUrl)
+        }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

@@ -5,6 +5,11 @@ enum KeypadBehaviour: Equatable {
     case appendNumberBeforeDot(_ number: Int)
 }
 
+enum Flag {
+    case first
+    case second
+}
+
 final class ConverterViewModel {
     
     enum Constants {
@@ -19,8 +24,9 @@ final class ConverterViewModel {
     var currencyArray: [Currency]
     var initialNumber: String
     var secondNumber: String
+    var coordinator: AppCoordinator?
     
-    var onUpdate: (() -> Void) = {}
+    var onUpdate: ((String) -> Void)?
     
     init(firstCurrencyFlag: String = "USD",
          secondCurrencyFlag: String = "BTC",
@@ -52,22 +58,23 @@ final class ConverterViewModel {
         }
     }
     
+    func flagPressed(_ flag: Flag) {
+        switch flag {
+        case .first:
+            isFirstFlagSelected = true
+        case .second:
+            isSecondFlagSelected = true
+        }
+        
+        coordinator?.presentSearchViewController(self)
+    }
+    
     func hasTwoDecimalPlaces(_ number: String) -> Bool {
         if let dotIndex = number.firstIndex(of: ".") {
             let decimalPart = number[dotIndex...]
             return decimalPart.dropFirst().count == 2
         }
         return false
-    }
-    
-    func didSelectFlag(url: String, currency: String) {
-        if isFirstFlagSelected {
-            firstCurrencyFlag = currency
-            isFirstFlagSelected = false
-        } else if isSecondFlagSelected {
-            secondCurrencyFlag = currency
-            isSecondFlagSelected = false
-        }
     }
     
     func keypadBehaviour(tag: Int, currentText: String) -> String {
@@ -100,5 +107,21 @@ final class ConverterViewModel {
         guard let initial =  Float(initialNumber), let currency = currencyArray.first else { return }
         let value = initial * currency.rate
         secondNumber = value.roundedString
+    }
+}
+
+extension ConverterViewModel: SelectFlagDelegate {
+    func didSelectFlag(url: String, currency: String) {
+        if isFirstFlagSelected {
+            firstCurrencyFlag = currency
+            isFirstFlagSelected = false
+        } else if isSecondFlagSelected {
+            secondCurrencyFlag = currency
+            isSecondFlagSelected = false
+        }
+        
+        onUpdate?(url)
+        
+        fetchCurrencyData(baseCurrency: firstCurrencyFlag, secondaryCurrency: secondCurrencyFlag)
     }
 }

@@ -19,7 +19,20 @@ final class AppCoordinator: Coordinator {
          
     func start() {
         let initialViewController = DependencyProvider.converterViewController
+        initialViewController.viewModel.coordinator = self
         navigationController.pushViewController(initialViewController, animated: false)
     }
+    
+    func presentSearchViewController(_ selectFlag: SelectFlagDelegate) {
+        let searchViewController = DependencyProvider.searchViewController
+        searchViewController.viewModel.delegate = selectFlag
+        searchViewController.viewModel.coordinator = self
+        searchViewController.modalPresentationStyle = .pageSheet
+        searchViewController.sheetPresentationController?.detents = [.medium()]
+        navigationController.present(searchViewController, animated: true)
+    }
+    
+    func dismissSearchViewController() {
+        navigationController.presentedViewController?.dismiss(animated: true)
+    }
 }
-
